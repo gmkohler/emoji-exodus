@@ -14,9 +14,13 @@ A way to move emoji from one Slack instance to another
   ```
   You will know if this worked if you see a `(env)` at the beginning of your CLI prompt.
 
+- Add appropriate environment variables.  You're going to want `SLACK_API_TOKEN` and `SLACK_SANDBOX_CHANNEL_ID` set.
+
+
 - Install the packages via `pip3`:
 
   ```sh
   (env) $ pip3 install -r requirements.txt
   ```
 
+- run `python3 application.py [message]` to send a message to the sandbox.
