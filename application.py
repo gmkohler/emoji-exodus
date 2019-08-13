@@ -1,9 +1,11 @@
+# import json
 import os
 import sys
-import slack
+from emoji import emoji_transfer_service, emoji_client
 
-client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+source_client = emoji_client(os.environ["SOURCE_SLACK_API_TOKEN"])
+destination_client = emoji_client(os.environ["DESTINATION_SLACK_API_TOKEN"])
+# source_dict = json.load(open("results.json"))
+# destination_dict = destination_client.emoji_dict()
 
-client.chat_postMessage(
-    channel=os.environ['SLACK_SANDBOX_CHANNEL_ID'],
-    text=sys.argv[1])
+emoji_transfer_service.transfer(source_client, destination_client, sys.argv[1])

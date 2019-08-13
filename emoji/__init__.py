@@ -1,7 +1,8 @@
 import os
 import sys
 import slack
-from .emoji_client import EmojiClient
+from .slack_emoji_client import SlackEmojiClient
 
 
-client = EmojiClient()
+def emoji_client(token):
+    return SlackEmojiClient(token)
