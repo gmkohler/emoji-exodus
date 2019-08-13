@@ -14,7 +14,11 @@ A way to move emoji from one Slack instance to another
   ```
   You will know if this worked if you see a `(env)` at the beginning of your CLI prompt.
 
-- Add appropriate environment variables.  You're going to want `SLACK_API_TOKEN` and `SLACK_SANDBOX_CHANNEL_ID` set.
+- Add appropriate environment variables.  You're going to want the following:
+  | Key  | Description |
+  | ------------- | ------------- |
+  | SOURCE_SLACK_API_KEY  | A personal API key generated from [Slack's legacy tokens documentation](https://api.slack.com/custom-integrations/legacy-tokens) for the Slack instance from which you would like to export emoji |
+  | DESTINATION_SLACK_API_KEY  | A personal API key generated from [Slack's legacy tokens documentation](https://api.slack.com/custom-integrations/legacy-tokens) for the Slack instance to which you would like to import emoji |
 
 
 - Install the packages via `pip3`:
