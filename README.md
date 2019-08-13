@@ -26,9 +26,20 @@ A way to move emoji from one Slack instance to another
 - run `python3 application.py [message]` to send a message to the sandbox.
 
 
-To use the emoji client:
+## Testing in a python console
+#### Slack Emoji Client
 ```python
-from emoji import client
+from emoji import emoji_client
+client = emoji_client(<api_token>)
+```
 
-client.emoji_dict()
+#### Emoji Transfer Service (for transferring emoji)
+```python
+from emoji import emoji_transfer_service, emoji_client
+
+source_client = emoji_client(<source_api_token>)
+destination_client = emoji_client(<destination_api_token>)
+emoji_name = "my-emoji"
+
+emoji_transfer_service.transfer(source_client, destination_client, emoji_name)
 ```
