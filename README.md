@@ -24,3 +24,11 @@ A way to move emoji from one Slack instance to another
   ```
 
 - run `python3 application.py [message]` to send a message to the sandbox.
+
+
+To use the emoji client:
+```python
+from emoji import client
+
+client.emoji_dict()
+```
