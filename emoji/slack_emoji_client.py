@@ -7,10 +7,11 @@ class SlackEmojiClient:
     def __init__(self, token):
         self.client = slack.WebClient(token=token)
 
-    def add_emoji(self, filepath, name):
+    def add_emoji(self, image_file, name):
+        """ `image_file` can be a local path to a file or a sublcass of `IOBase`. """
         return self.client.api_call(
             "emoji.add",
-            files={"image": filepath},
+            files={"image": image_file},
             data={"name": name, "mode": "data"}
         )
 
