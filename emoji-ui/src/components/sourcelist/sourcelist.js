@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SourceEmojiActions from '../../store/actions/source_emoji';
+import { filteredEmojiSelector } from '../../store/selectors/source_emoji';
 
 class SourceListBase extends Component {
   static propTypes = {
@@ -27,7 +28,7 @@ class SourceListBase extends Component {
 
 
 function mapStateToProps(state) {
-  return { sourceEmoji: state.sourceEmoji.list };
+  return { sourceEmoji: filteredEmojiSelector(state) };
 }
 
 function mapDispatchToProps(dispatch) {
