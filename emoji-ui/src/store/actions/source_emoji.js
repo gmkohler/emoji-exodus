@@ -17,4 +17,11 @@ function loadSourceEmoji() {
   };
 }
 
-export default { filterBy, loadSourceEmoji };
+function selectEmoji(emojiName, isSelected) {
+  return {
+    payload: { emojiName, isSelected },
+    type: ActionTypes.SELECT_SOURCE_EMOJI,
+  };
+}
+
+export default { filterBy, loadSourceEmoji, selectEmoji };
