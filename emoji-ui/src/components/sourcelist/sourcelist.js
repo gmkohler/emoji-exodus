@@ -4,10 +4,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SourceEmojiActions from '../../store/actions/source_emoji';
+import { uiFriendlyEmojiListSelector } from '../../store/selectors/source_emoji';
 
 class SourceListBase extends Component {
   static propTypes = {
-    sourceEmoji: PropTypes.any,
+    sourceEmoji: PropTypes.arrayOf(
+      PropTypes.shape({
+        isSelected: PropTypes.bool,
+        name: PropTypes.string,
+        url: PropTypes.string,
+      })
+    ),
     sourceEmojiActions: PropTypes.shape({
       loadSourceEmoji: PropTypes.func.isRequired,
     }).isRequired,
@@ -27,7 +34,7 @@ class SourceListBase extends Component {
 
 
 function mapStateToProps(state) {
-  return { sourceEmoji: state.sourceEmoji.list };
+  return { sourceEmoji: uiFriendlyEmojiListSelector(state) };
 }
 
 function mapDispatchToProps(dispatch) {
