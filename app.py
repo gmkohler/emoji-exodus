@@ -3,10 +3,12 @@ from emoji import emoji_client
 from emoji.emoji_transfer_service import url_even_if_alias
 import os
 import sys
+from flask_cors import CORS
 import json
 
 # instantiate the app
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(__name__)
 
 @app.route('/emoji', methods=['GET'])
@@ -23,7 +25,7 @@ def get_emoji_list():
             names_and_urls[k] = url_even_if_alias(source_dict, k)
 
         # filter out None values (aliases of standard emoji).
-        names_and_urls = { k: v for k, v in names_and_urls.items() if v is not None }
+        names_and_urls = { k: v for k, v in names_and_urls.items() if v is not None and not v.startswith("alias:") }
 
         return jsonify(names_and_urls)
     except:
