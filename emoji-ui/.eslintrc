@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+  },
+  "globals": {
+    "console": "readonly",
+    "document": "readonly",
+    "fetch": "readonly",
+    "navigator": "readonly",
+    "window": "readonly"
+  }
+}
+

@@ -1,9 +1,11 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import json
 import pdb
 
 # instantiate the app
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(__name__)
 
 @app.route('/emoji', methods=['GET'])
