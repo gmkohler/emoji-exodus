@@ -51,7 +51,7 @@ class SlackTokenInput extends Component {
 
         <small className="token-input-help-text">
           API keys can be found under window.TS.boot_data.api_token
-          while inspecting the "customize slack" webpage of a slack
+          while inspecting the &quot;customize slack&quot; webpage of a slack
           instance. They should start with xoxs-*.
         </small>
 

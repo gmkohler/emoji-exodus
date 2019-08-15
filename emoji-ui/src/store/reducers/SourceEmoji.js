@@ -1,4 +1,4 @@
-import ActionTypes from '../action_types';
+import ActionTypes from '../ActionTypes';
 
 const DEFAULT_STATE = {
   filterStr: '',
