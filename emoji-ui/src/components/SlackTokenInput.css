@@ -1,0 +1,20 @@
+.token-input-section {
+  margin-right: 30px;
+}
+
+.token-input-input {
+  margin-left: 10px
+}
+
+.token-input-help-text {
+  color: mediumaquamarine;
+  display: block;
+  margin-top: 10px;
+}
+
+.token-input-submit {
+  display: block;
+  margin: auto;
+  width: 20%;
+  margin-top: 20px;
+}
