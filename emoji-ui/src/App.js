@@ -5,7 +5,7 @@ import store from './store';
 import './App.css';
 
 import SlackTokenInput from './components/SlackTokenInput';
-import SourceList from './components/SourceList/SourceList';
+import SourceList from './components/SourceList';
 
 function App() {
   return (
