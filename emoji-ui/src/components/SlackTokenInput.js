@@ -38,7 +38,7 @@ class SlackTokenInput extends Component {
           />
         </label>
 
-        <label>
+        <label className="token-input-section">
           Destination Slack Api Key
           <input
             className="token-input-input"
@@ -48,6 +48,12 @@ class SlackTokenInput extends Component {
             onChange={this.handleInputChange}
           />
         </label>
+
+        <small className="token-input-help-text">
+          API keys can be found under window.TS.boot_data.api_token
+          while inspecting the "customize slack" webpage of a slack
+          instance. They should start with xoxs-*.
+        </small>
 
         <input className="token-input-submit" type="submit" value="Save" />
       </form>

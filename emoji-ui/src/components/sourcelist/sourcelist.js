@@ -20,7 +20,6 @@ class SourceListBase extends Component {
     }).isRequired,
   };
 
-
   componentDidMount() {
     this.props.sourceEmojiActions.loadSourceEmoji();
   }
