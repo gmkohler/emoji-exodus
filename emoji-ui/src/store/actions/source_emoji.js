@@ -1,5 +1,6 @@
 import ActionTypes from '../action_types';
-import { fetchSourceEmoji } from '../../network/source';
+import * as Network from '../../network/source';
+import { selectedEmojiNameSelector } from '../selectors/source_emoji';
 
 function filterBy(filterStr) {
   return {
@@ -12,7 +13,7 @@ function loadSourceEmoji() {
   return dispatch => {
     dispatch({
       type: ActionTypes.LOAD_SOURCE_EMOJI,
-      payload: fetchSourceEmoji(),
+      payload: Network.fetchSourceEmoji(),
     });
   };
 }
@@ -24,4 +25,19 @@ function selectEmoji(emojiName, isSelected) {
   };
 }
 
-export default { filterBy, loadSourceEmoji, selectEmoji };
+function transferSelectedEmoji() {
+  return (dispatch, getState) => {
+    const emojiNames = selectedEmojiNameSelector(getState());
+    dispatch({
+      type: ActionTypes.TRANSFER_SELECTED_EMOJI,
+      payload: Network.transferSourceEmojiToDestination(emojiNames),
+    });
+  };
+}
+
+export default {
+  filterBy,
+  loadSourceEmoji,
+  selectEmoji,
+  transferSelectedEmoji,
+};
