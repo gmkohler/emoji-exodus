@@ -1,8 +1,18 @@
 
-const API = 'http://localhost:5000/';
+const API = 'http://localhost:5000';
 
 function fetchSourceEmoji() {
-  return fetch(`${API}emoji`).then(r => r.json());
+  return fetch(`${API}/emoji`)
+    .then(r => r.json());
 }
 
-export { fetchSourceEmoji };
+function transferSourceEmojiToDestination(emojiNames) {
+  const body = JSON.stringify({ emoji: emojiNames });
+  return fetch(`${API}/transfer`, { body, method: 'POST' })
+    .then(r => r.json());
+}
+
+export {
+  fetchSourceEmoji,
+  transferSourceEmojiToDestination,
+};

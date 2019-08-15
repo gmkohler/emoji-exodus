@@ -21,6 +21,17 @@ const filteredEmojiSelector = createSelector(
 );
 
 /**
+ * Creates a simple array of all names of selected emoji.
+ */
+const selectedEmojiNameSelector = createSelector(
+  sourceEmojiListSelector,
+  sourceEmojiSelectionMapSelector,
+  (list, selectionMap) => {
+    return list.filter(item => selectionMap[item.name]).map(i => i.name);
+  }
+);
+
+/**
  * Adds ui-related metadata to the list, such as whether an item was selected.
  */
 const uiFriendlyEmojiListSelector = createSelector(
@@ -34,4 +45,4 @@ const uiFriendlyEmojiListSelector = createSelector(
   }
 );
 
-export { uiFriendlyEmojiListSelector };
+export { selectedEmojiNameSelector, uiFriendlyEmojiListSelector };
