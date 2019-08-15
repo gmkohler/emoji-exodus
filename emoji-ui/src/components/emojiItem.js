@@ -4,14 +4,17 @@ import './EmojiItem.css';
 
 class EmojiItem extends Component {
   static propTypes = {
-    isSelected: PropTypes.bool.isRequired,
-    url: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    clickHandler: PropTypes.func.isRequired,
+    emoji: PropTypes.shape({
+      isSelected: PropTypes.bool.isRequired,
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }).isRequired,
+    clickHandler: PropTypes.func,
   };
 
   render() {
-    const { isSelected, url, name, clickHandler } = this.props;
+    const { clickHandler } = this.props;
+    const { isSelected, url, name } = this.props.emoji;
     const styles = { backgroundImage: `url(${url})` };
     const containerClasses = `emoji-container${isSelected ? ' emoji-container--selected' : ''}`;
 
