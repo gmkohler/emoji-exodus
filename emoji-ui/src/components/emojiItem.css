@@ -1,18 +1,18 @@
-.Emoji-container {
+.emoji-container {
   display: inline-block;
   border-radius: 10px;
   padding: 15px;
 }
 
-.Emoji-container:hover, .Emoji-container-selected {
+.emoji-container:hover, .Emoji-container--selected {
   background-color: #d4e8f9;
 }
 
-.Emoji-item {
+.emoji-item {
   width: 45px;
   height: 45px;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
   border-width: 0;
 }
