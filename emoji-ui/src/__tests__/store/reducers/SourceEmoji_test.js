@@ -1,5 +1,5 @@
-import ActionTypes from '../../../store/action_types';
-import sourceEmoji from '../../../store/reducers/source_emoji';
+import ActionTypes from '../../../store/ActionTypes';
+import sourceEmoji from '../../../store/reducers/SourceEmoji';
 
 const SAMPLE_EMOJI_PAYLOAD = Object.freeze({
   'earl-grey': 'nom-nom-boba.png',
@@ -7,7 +7,7 @@ const SAMPLE_EMOJI_PAYLOAD = Object.freeze({
   'chai': 'teapot.jpg',
 });
 
-describe('reducers: source emoji', () => {
+describe('reducers: SourceEmoji', () => {
   it('has a default empty list of emoji', () => {
       const store = sourceEmoji(undefined, { type: 'NOT_A_REAL_ACTION' });
       expect(store.list).toEqual([]);

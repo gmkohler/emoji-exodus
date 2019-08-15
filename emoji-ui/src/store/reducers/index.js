@@ -1,4 +1,4 @@
 import { combineReducers } from 'redux';
-import sourceEmoji from './source_emoji';
+import sourceEmoji from './SourceEmoji';
 
 export default combineReducers({ sourceEmoji });

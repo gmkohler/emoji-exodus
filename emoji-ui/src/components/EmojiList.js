@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import EmojiItem from './emojiItem';
-import './emojiList.css';
+import EmojiItem from './EmojiItem';
+import './EmojiList.css';
 
 class EmojiList extends Component {
   static propTypes = {

@@ -1,6 +1,6 @@
-import ActionTypes from '../action_types';
-import * as Network from '../../network/source';
-import { selectedEmojiNameSelector } from '../selectors/source_emoji';
+import ActionTypes from '../ActionTypes';
+import * as Network from '../../network/Source';
+import { selectedEmojiNameSelector } from '../selectors/SourceEmoji';
 
 function filterBy(filterStr) {
   return {

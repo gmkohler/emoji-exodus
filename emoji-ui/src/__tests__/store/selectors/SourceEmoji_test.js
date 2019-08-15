@@ -1,6 +1,6 @@
-import { selectedEmojiNameSelector, uiFriendlyEmojiListSelector } from '../../../store/selectors/source_emoji';
+import { selectedEmojiNameSelector, uiFriendlyEmojiListSelector } from '../../../store/selectors/SourceEmoji';
 
-describe('selectors: source emoji', () => {
+describe('selectors: SourceEmoji', () => {
   let store;
 
   beforeEach(() => {

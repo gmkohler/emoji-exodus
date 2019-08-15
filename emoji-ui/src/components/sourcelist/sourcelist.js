@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import SourceEmojiActions from '../../store/actions/source_emoji';
-import { uiFriendlyEmojiListSelector } from '../../store/selectors/source_emoji';
-import EmojiList from '../emojiList';
+import SourceEmojiActions from '../../store/actions/SourceEmoji';
+import { uiFriendlyEmojiListSelector } from '../../store/selectors/SourceEmoji';
+import EmojiList from '../EmojiList';
 
 class SourceListBase extends Component {
   static propTypes = {
