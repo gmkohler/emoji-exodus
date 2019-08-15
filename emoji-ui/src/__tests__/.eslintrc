@@ -1,5 +1,9 @@
 {
   "globals": {
+    "afterEach": "readonly",
+    "beforeEach": "readonly",
+    "describe": "readonly",
+    "expect": "readonly",
     "it": "readonly"
   }
 }
