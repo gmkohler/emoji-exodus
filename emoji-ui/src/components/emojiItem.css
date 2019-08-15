@@ -4,7 +4,7 @@
   padding: 15px;
 }
 
-.emoji-container:hover, .Emoji-container--selected {
+.emoji-container:hover, .emoji-container--selected {
   background-color: #d4e8f9;
 }
 
