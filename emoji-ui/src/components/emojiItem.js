@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import './emojiItem.css';
+import './EmojiItem.css';
 
 class EmojiItem extends Component {
   static propTypes = {
