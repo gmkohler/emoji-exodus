@@ -26,21 +26,11 @@ def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
 
     return destination_name
 
-def transfer(source_client, destination_client, source_emoji_name):
+def transfer(source_dict, destination_client, source_emoji_name):
     print("Transferring '{}'".format(source_emoji_name))
 
-    source_dict = source_client.emoji_dict()
     destination_dict = destination_client.emoji_dict()
-
-    # TODO: move this to a helper
-    hashes_for_destination_emoji = {}
-    destination_emoji_with_urls = { name: val for name, val in destination_dict.items() if not val.startswith("alias:") }
-    for name, url in destination_emoji_with_urls.items():
-        image = image_client.get(url)
-        digest = image_client.hexdigest(image)
-
-        if not hashes_for_destination_emoji.get(digest):
-            hashes_for_destination_emoji[digest] = name
+    hashes_for_destination_emoji = destination_client.hashes_for_emoji_images()
 
     emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
     if emoji_image_url is None:

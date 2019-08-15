@@ -8,4 +8,4 @@ destination_client = emoji_client(os.environ["DESTINATION_SLACK_API_TOKEN"])
 # source_dict = json.load(open("results.json"))
 # destination_dict = destination_client.emoji_dict()
 
-emoji_transfer_service.transfer(source_client, destination_client, sys.argv[1])
+emoji_transfer_service.transfer(source_client.emoji_dict(), destination_client, sys.argv[1])
