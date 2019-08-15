@@ -12,14 +12,20 @@ class EmojiList extends Component {
         url: PropTypes.string,
       })
     ).isRequired,
-    clickHandler: PropTypes.func,
+    sourceEmojiActions: PropTypes.shape({
+      selectEmoji: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   render() {
-    const { sourceEmoji } = this.props;
+    const { sourceEmoji, sourceEmojiActions } = this.props;
+    const { selectEmoji } = sourceEmojiActions;
+
     const emojiListItem = sourceEmoji.map((emoji) => {
-      return <EmojiItem key={emoji.name} emoji={emoji} clickHandler={this.clickHandler} />
-    })
+      return (
+        <EmojiItem key={emoji.name} emoji={emoji} onSelect={selectEmoji} />
+      );
+    });
     return <div className="emoji-list-container">{emojiListItem}</div>
   }
 }
