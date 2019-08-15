@@ -52,7 +52,9 @@ def transfer(source_dict, destination_client, source_emoji_name):
         print("No existing image detected.  Adding new emoji '{}'.".format(name_of_source_emoji_in_destination))
         return destination_client.add_emoji(source_emoji_image, name_of_source_emoji_in_destination)
     else:
-        if destination_emoji_name_having_identical_image == source_emoji_name:
+        names_for_identical_image = destination_client.aliases_for_emoji_name().get(destination_emoji_name_having_identical_image)
+
+        if source_emoji_name in names_for_identical_image:
             print("source emoji '{}' already exists in the destination with this image and name.  Taking no action.".format(source_emoji_name))
             return None
         else:
