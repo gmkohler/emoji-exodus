@@ -5,10 +5,10 @@ import './emojiItem.css';
 class EmojiItem extends Component {
   static propTypes = {
     emoji: PropTypes.shape({
-      isSelected: PropTypes.bool,
-      name: PropTypes.string,
-      url: PropTypes.string,
-    }),
+      isSelected: PropTypes.bool.isRequired,
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }).isRequired,
     clickHandler: PropTypes.func,
   };
 
