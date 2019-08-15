@@ -9,6 +9,7 @@ class SlackEmojiClient:
         self.client = slack.WebClient(token=token)
         self._emoji_dict = None
         self._hashes_for_emoji_images = None
+        self._aliases_for_emoji_name = None
 
     def add_emoji(self, image_file, name):
         """ `image_file` can be a local path to a file or a sublcass of `IOBase`. """
@@ -47,3 +48,20 @@ class SlackEmojiClient:
                     self._hashes_for_emoji_images[digest] = name
 
         return self._hashes_for_emoji_images
+
+    def aliases_for_emoji_name(self):
+        if self._aliases_for_emoji_name is None:
+            self._aliases_for_emoji_name = {}
+
+            for name, value in self.emoji_dict().items():
+                if value.startswith("alias:"):
+                    key = value.replace("alias:", "")
+                else:
+                    key = name
+
+                if self._aliases_for_emoji_name.get(key) is None:
+                    self._aliases_for_emoji_name[key] = set()
+
+                self._aliases_for_emoji_name[key].add(name)
+
+        return self._aliases_for_emoji_name
