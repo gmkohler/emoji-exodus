@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import SourceEmojiActions from '../../store/actions/source_emoji';
 import { uiFriendlyEmojiListSelector } from '../../store/selectors/source_emoji';
+import EmojiList from '../emojiList';
 
 class SourceListBase extends Component {
   static propTypes = {
@@ -27,8 +28,8 @@ class SourceListBase extends Component {
 
   render() {
     const { sourceEmoji } = this.props;
-    const firstTwenty = sourceEmoji.slice(0, 20);
-    return <h1>{JSON.stringify(firstTwenty)}</h1>;
+    const firstBatch = sourceEmoji.slice(0, 200);
+    return <EmojiList sourceEmoji={firstBatch} />;
   }
 }
 
