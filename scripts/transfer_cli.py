@@ -50,6 +50,3 @@ def _emoji_from_csv(source):
             emoji_names.add(row['emoji name'])
 
     return emoji_names
-
-if __name__ == '__main__':
-    import_emoji()
