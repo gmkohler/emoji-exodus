@@ -1,7 +1,7 @@
 import os
 import sys
 import slack
-from .slack_emoji_client import SlackEmojiClient
+from .emoji_service import EmojiService
 
-def emoji_client(token):
-    return SlackEmojiClient(token)
+def emoji_service(token):
+    return EmojiService(token)
