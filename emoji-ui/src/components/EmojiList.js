@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import SourceEmojiActions from '../store/actions/SourceEmoji';
+import { currentPageEmojiListSelector } from '../store/selectors/SourceEmoji';
 import EmojiItem from './EmojiItem';
 import './EmojiList.css';
 
-class EmojiList extends Component {
+class EmojiListBase extends Component {
   static propTypes = {
     sourceEmoji: PropTypes.arrayOf(
       PropTypes.shape({
@@ -13,9 +18,14 @@ class EmojiList extends Component {
       })
     ).isRequired,
     sourceEmojiActions: PropTypes.shape({
+      loadSourceEmoji: PropTypes.func.isRequired,
       selectEmoji: PropTypes.func.isRequired,
     }).isRequired,
   };
+
+  componentDidMount() {
+    this.props.sourceEmojiActions.loadSourceEmoji();
+  }
 
   render() {
     const { sourceEmoji, sourceEmojiActions } = this.props;
@@ -30,4 +40,15 @@ class EmojiList extends Component {
   }
 }
 
-export default EmojiList;
+function mapStateToProps(state) {
+  return { sourceEmoji: currentPageEmojiListSelector(state) };
+}
+
+function mapDispatchToProps(dispatch) {
+  return { sourceEmojiActions: bindActionCreators(SourceEmojiActions, dispatch) };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EmojiListBase);

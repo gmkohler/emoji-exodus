@@ -4,6 +4,9 @@ const sourceEmojiListSelector = state => state.sourceEmoji.list;
 const sourceEmojiFilterStringSelector = state => state.sourceEmoji.filterStr;
 const sourceEmojiSelectionMapSelector = state => state.sourceEmoji.selectionMap;
 
+const currentPage = state => state.pagination.currentPage;
+const pageItemLimit = state => state.pagination.pageItemLimit;
+
 /**
  * Filters the ui-friendly list based on a string.
  */
@@ -45,4 +48,17 @@ const uiFriendlyEmojiListSelector = createSelector(
   }
 );
 
-export { selectedEmojiNameSelector, uiFriendlyEmojiListSelector };
+/**
+ * Get the current page list
+ */
+const currentPageEmojiListSelector = createSelector(
+  currentPage,
+  pageItemLimit,
+  uiFriendlyEmojiListSelector,
+  (currentPage, pageItemLimit, list) => {
+    const startIdx = (currentPage - 1) * pageItemLimit;
+    return list.slice(startIdx, startIdx + pageItemLimit);
+  }
+);
+
+export { selectedEmojiNameSelector, uiFriendlyEmojiListSelector, currentPageEmojiListSelector };
