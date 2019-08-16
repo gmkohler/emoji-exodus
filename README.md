@@ -28,8 +28,6 @@ A way to move emoji from one Slack instance to another
   (env) $ pip3 install -r requirements.txt
   ```
 
-- run `python3 application.py [message]` to send a message to the sandbox.
-
 
 ## CLI interface
 ### List of names
