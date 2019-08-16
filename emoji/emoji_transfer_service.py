@@ -1,9 +1,11 @@
-from image import image_client
+from image.image_client import get as get_image
 
 def url_even_if_alias(emoji_dict, emoji_name):
     """If it's an alias, we want to get the url for the file.  Will return None if aliasing a standard emoji"""
     emoji_path = emoji_dict.get(emoji_name)
 
+    if emoji_path is None:
+        raise("'{}' is not the name of an emoji in the source.".format(emoji_name))
     if emoji_path.startswith("alias:"):
         aliased_from = emoji_path.replace("alias:", "")
         emoji_path = emoji_dict.get(aliased_from)
@@ -26,33 +28,32 @@ def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
 
     return destination_name
 
-def transfer(source_dict, destination_client, source_emoji_name):
+def transfer(source_dict, destination_service, source_emoji_name):
     print("Transferring '{}'".format(source_emoji_name))
-
-    destination_dict = destination_client.emoji_dict()
-    hashes_for_destination_emoji = destination_client.hashes_for_emoji_images()
 
     emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
     if emoji_image_url is None:
         # Making an alias for a standard emoji
         standard_emoji_name = source_dict.get(source_emoji_name).replace("alias:", "")
         print("'{}' aliases standard emoji '{}' detected.  Creating alias.".format(source_emoji_name, standard_emoji_name))
-        return destination_client.add_alias(source_emoji_name, standard_emoji_name)
+        return destination_service.add_alias(source_emoji_name, standard_emoji_name)
 
     # Creating a new emoji
-
-    source_emoji_image = image_client.get(emoji_image_url)
+    source_emoji_image = get_image(emoji_image_url)
+    destination_dict = destination_service.emoji_dict
 
     # Check destination emoji for the exact same image as the source emoji
-    hash_of_source_emoji_image = image_client.hexdigest(source_emoji_image)
-    destination_emoji_name_having_identical_image = hashes_for_destination_emoji.get(hash_of_source_emoji_image)
+    destination_emoji_name_having_identical_image = destination_dict.get_emoji_name_for_image(source_emoji_image)
 
     if destination_emoji_name_having_identical_image is None:
         name_of_source_emoji_in_destination = collision_free_name(destination_dict, source_emoji_name)
         print("No existing image detected.  Adding new emoji '{}'.".format(name_of_source_emoji_in_destination))
-        return destination_client.add_emoji(source_emoji_image, name_of_source_emoji_in_destination)
+        return destination_service.add_emoji(
+            name_of_source_emoji_in_destination,
+            source_emoji_image,
+            emoji_image_url)
     else:
-        names_for_identical_image = destination_client.aliases_for_emoji_name().get(destination_emoji_name_having_identical_image)
+        names_for_identical_image = destination_service.emoji_dict.get_aliases(destination_emoji_name_having_identical_image)
 
         if source_emoji_name in names_for_identical_image:
             print("source emoji '{}' already exists in the destination with this image and name.  Taking no action.".format(source_emoji_name))
@@ -65,6 +66,6 @@ def transfer(source_dict, destination_client, source_emoji_name):
                 aliased_name=name_of_source_emoji_in_destination
             ))
 
-            return destination_client.add_alias(name_of_source_emoji_in_destination, destination_emoji_name_having_identical_image)
+            return destination_service.add_alias(name_of_source_emoji_in_destination, destination_emoji_name_having_identical_image)
 
 

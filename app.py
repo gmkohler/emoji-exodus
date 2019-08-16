@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from emoji import emoji_client, emoji_transfer_service
+from emoji import emoji_service, emoji_transfer_service
 import util.tokens as tokens
 import os
 import sys
@@ -17,9 +17,9 @@ def get_emoji_list():
         source_token = tokens.token_from_header_or_env(
             request.headers.get(tokens.SOURCE_AUTHORIZATION_HEADER, os.environ.get(tokens.SOURCE_ENV_VARIABLE))
         )
-        source_client = emoji_client(source_token)
+        source_service = emoji_service(source_token)
 
-        source_dict = source_client.emoji_dict()
+        source_dict = source_service.emoji_dict.emoji_dict # don't ask.
 
         # map alias values to URL values or None
         names_and_urls = {}
@@ -44,10 +44,10 @@ def transfer_emoji():
         request.headers.get(tokens.DESTINATION_AUTHORIZATION_HEADER, os.environ.get(tokens.DESTINATION_ENV_VARIABLE))
     )
 
-    source_dict = emoji_client(source_token).emoji_dict()
-    destination_client = emoji_client(destination_token)
+    source_dict = emoji_service(source_token).emoji_dict
+    destination_service = emoji_service(destination_token)
 
-    emoji_transfer_service.transfer(source_dict, destination_client, emoji_name)
+    emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
 
     return json.dumps({ 'success': True }), 200, { 'Content-Type': 'application/json' }
 

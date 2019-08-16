@@ -40,11 +40,11 @@ client = emoji_client(<api_token>)
 
 #### Emoji Transfer Service (for transferring emoji)
 ```python
-from emoji import emoji_transfer_service, emoji_client
+from emoji import transfer_service, emoji_client
 
 source_client = emoji_client(<source_api_token>)
 destination_client = emoji_client(<destination_api_token>)
 emoji_name = "my-emoji"
 
-emoji_transfer_service.transfer(source_client, destination_client, emoji_name)
+transfer_service.transfer(source_client, destination_client, emoji_name)
 ```
