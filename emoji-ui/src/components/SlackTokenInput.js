@@ -26,7 +26,7 @@ class SlackTokenInput extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="token-input-form">
         <label className="token-input-section">
           Source Slack Api Key
           <input
@@ -55,7 +55,7 @@ class SlackTokenInput extends Component {
           instance. They should start with xoxs-*.
         </small>
 
-        <input className="token-input-submit" type="submit" value="Save" />
+        <input className="token-input-submit" type="submit" value="Save API Tokens" />
       </form>
     );
   }
