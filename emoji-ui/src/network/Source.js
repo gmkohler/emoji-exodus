@@ -8,7 +8,14 @@ function fetchSourceEmoji() {
 
 function transferSourceEmojiToDestination(emojiNames) {
   const body = JSON.stringify({ emoji: emojiNames });
-  return fetch(`${API}/transfer`, { body, method: 'POST' })
+  return fetch(`${API}/transfer`, {
+    body,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+  })
     .then(r => r.json());
 }
 
