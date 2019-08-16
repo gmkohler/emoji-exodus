@@ -1,0 +1,12 @@
+.pagination-container {
+  padding: 40px;
+  color: gray;
+}
+
+.pagination-container input {
+  margin: 0 10px;
+  width: 50px;
+  font-size: 17px;
+  text-align: center;
+  border-radius: 5px;
+}
