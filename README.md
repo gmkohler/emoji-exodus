@@ -31,6 +31,19 @@ A way to move emoji from one Slack instance to another
 - run `python3 application.py [message]` to send a message to the sandbox.
 
 
+## CLI interface
+### List of names
+Passing a list of names, e.g. `python application.py emoji_1 emoji_2 emoji_3`
+
+### CSV file
+Passing the filepath to a CSV file, e.g. `python application.py --source='path/to/file.csv'`
+The CSV should have a column header called `emoji name`
+
+### Wildcards
+Both CLI interfaces support the use of wildcards at the end of the name. For example,
+passing `llama*` would transfer all emoji whose names start with `llama`.
+
+
 ## Testing in a python console
 #### Slack Emoji Client
 ```python
