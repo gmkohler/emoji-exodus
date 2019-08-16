@@ -1,7 +1,20 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import TokenActions from '../store/actions/SetApiTokens';
 import './SlackTokenInput.css';
 
 class SlackTokenInput extends Component {
+  static propTypes = {
+    sourceToken: PropTypes.string.isRequired,
+    destinationToken: PropTypes.string.isRequired,
+    tokenActions: PropTypes.shape({
+      setApiTokens: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +34,8 @@ class SlackTokenInput extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    // saving doesn't actually do anything yet!
+    const { setApiTokens } = this.props.tokenActions;
+    setApiTokens(this.state.sourceSlackApiKey, this.state.destinationSlackApiKey);
   }
 
   render() {
@@ -61,4 +75,18 @@ class SlackTokenInput extends Component {
   }
 }
 
-export default SlackTokenInput;
+function mapStateToProps(state) {
+  return {
+    sourceToken: state.setApiTokens.sourceToken,
+    destinationToken: state.setApiTokens.destinationToken,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return { tokenActions: bindActionCreators(TokenActions, dispatch) };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SlackTokenInput);
