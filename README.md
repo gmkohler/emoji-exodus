@@ -1,6 +1,6 @@
 # emoji-exodus
-A way to move emoji from one Slack instance to another
 
+A way to move emoji from one Slack instance to another
 
 ## Setup
 
@@ -14,36 +14,42 @@ A way to move emoji from one Slack instance to another
   ```
   You will know if this worked if you see a `(env)` at the beginning of your CLI prompt.
 
-- Add appropriate environment variables.  You're going to want the following:
-
-  | Key  | Description |
-  | ------------- | ------------- |
-  | SOURCE_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the source slack instance.  It should start with `xoxs-*`. |
-  | DESTINATION_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the destination slack instance.  It should start with `xoxs-*`. |
-
-
 - Install the packages via `pip3`:
 
   ```sh
   (env) $ pip3 install -r requirements.txt
   ```
 
-
 ## CLI interface
+
+### Setup
+
+You're going to want the following environment variables set in your virtual environment:
+
+  | Key  | Description |
+  | ------------- | ------------- |
+  | SOURCE_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the source slack instance.  It should start with `xoxs-*`. |
+  | DESTINATION_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the destination slack instance.  It should start with `xoxs-*`. |
+
 ### List of names
+
 Passing a list of names, e.g. `python application.py emoji_1 emoji_2 emoji_3`
 
 ### CSV file
+
 Passing the filepath to a CSV file, e.g. `python application.py --source='path/to/file.csv'`
 The CSV should have a column header called `emoji name`
 
 ### Wildcards
+
 Both CLI interfaces support the use of wildcards at the end of the name. For example,
 passing `llama*` would transfer all emoji whose names start with `llama`.
 
 
-## Testing in a python console
+### Testing in a python console
+
 #### Emoji Transfer Service (for transferring emoji)
+
 ```python
 from emoji import emoji_transfer_service, emoji_service
 
@@ -53,3 +59,13 @@ emoji_name = "my-emoji"
 
 emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
 ```
+
+## JSON API interface
+
+Your requests should include the following headers:
+
+  | Key  | Value | Description |
+  | ------------- | ------------- | -------------- |
+  | Content-Type | `'application/json'` | We use JSON here.  Flask needs this to know how to parse the request bodies. |
+  | X-Authorization-Source | `'Bearer ${token}'` | `token` refers to a personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the source slack instance.  It should start with `xoxs-*`. |
+  | X-Authorization-Destination  | `'Bearer ${token}'` | `token` refers to a personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the destination slack instance.  It should start with `xoxs-*`. |
