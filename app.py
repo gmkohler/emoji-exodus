@@ -36,7 +36,6 @@ def get_emoji_list():
 
 @app.route('/transfer', methods=['POST'])
 def transfer_emoji():
-    emoji_name = request.json.get('emoji')[0]
     source_token = tokens.token_from_header_or_env(
         request.headers.get(tokens.SOURCE_AUTHORIZATION_HEADER, os.environ.get(tokens.SOURCE_ENV_VARIABLE))
     )
@@ -44,10 +43,12 @@ def transfer_emoji():
         request.headers.get(tokens.DESTINATION_AUTHORIZATION_HEADER, os.environ.get(tokens.DESTINATION_ENV_VARIABLE))
     )
 
+    emoji_names = request.json.get('emoji')
     source_dict = emoji_service(source_token).emoji_dict
     destination_service = emoji_service(destination_token)
 
-    emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
+    for emoji_name in emoji_names:
+        emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
 
     return json.dumps({ 'success': True }), 200, { 'Content-Type': 'application/json' }
 
