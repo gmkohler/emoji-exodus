@@ -34,17 +34,17 @@ A way to move emoji from one Slack instance to another
 ## Testing in a python console
 #### Slack Emoji Client
 ```python
-from emoji import emoji_client
-client = emoji_client(<api_token>)
+from emoji import emoji_service
+service = emoji_service(<api_token>)
 ```
 
 #### Emoji Transfer Service (for transferring emoji)
 ```python
-from emoji import transfer_service, emoji_client
+from emoji import emoji_transfer_service, emoji_service
 
-source_client = emoji_client(<source_api_token>)
-destination_client = emoji_client(<destination_api_token>)
+source_dict = emoji_service(<source_api_token>).emoji_dict.emoji_dict # don't ask.
+destination_service = emoji_service(<destination_api_token>)
 emoji_name = "my-emoji"
 
-transfer_service.transfer(source_client, destination_client, emoji_name)
+emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
 ```
