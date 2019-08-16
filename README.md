@@ -43,12 +43,6 @@ passing `llama*` would transfer all emoji whose names start with `llama`.
 
 
 ## Testing in a python console
-#### Slack Emoji Client
-```python
-from emoji import emoji_service
-service = emoji_service(<api_token>)
-```
-
 #### Emoji Transfer Service (for transferring emoji)
 ```python
 from emoji import emoji_transfer_service, emoji_service
