@@ -18,6 +18,7 @@ class SourceListBase extends Component {
     ),
     sourceEmojiActions: PropTypes.shape({
       loadSourceEmoji: PropTypes.func.isRequired,
+      selectEmoji: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -26,9 +27,9 @@ class SourceListBase extends Component {
   }
 
   render() {
-    const { sourceEmoji } = this.props;
+    const { sourceEmoji, sourceEmojiActions } = this.props;
     const firstBatch = sourceEmoji.slice(0, 200);
-    return <EmojiList sourceEmoji={firstBatch} />;
+    return <EmojiList sourceEmojiActions={sourceEmojiActions} sourceEmoji={firstBatch} />;
   }
 }
 

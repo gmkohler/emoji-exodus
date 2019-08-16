@@ -4,15 +4,24 @@
   padding: 15px;
 }
 
-.emoji-container:hover, .emoji-container--selected {
+.emoji-container:hover {
   background-color: #d4e8f9;
 }
 
+.emoji-container--selected {
+  background-color: lightgray;
+}
+
 .emoji-item {
-  width: 45px;
-  height: 45px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   border-width: 0;
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+}
+
+.emoji-item:focus {
+  outline: 0; /* remove that default active-state blue border */
 }

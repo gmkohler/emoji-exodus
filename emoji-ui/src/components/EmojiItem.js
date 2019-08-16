@@ -9,18 +9,36 @@ class EmojiItem extends Component {
       name: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     }).isRequired,
-    clickHandler: PropTypes.func,
+    onSelect: PropTypes.func.isRequired,
   };
 
+  constructor() {
+    super(...arguments);
+    this._onSelect = this._onSelect.bind(this);
+  }
+
+  _onSelect() {
+    const { emoji, onSelect } = this.props;
+    onSelect(emoji.name, !emoji.isSelected);
+  }
+
   render() {
-    const { clickHandler } = this.props;
-    const { isSelected, url, name } = this.props.emoji;
+    const { isSelected, name, url } = this.props.emoji;
     const styles = { backgroundImage: `url(${url})` };
-    const containerClasses = `emoji-container${isSelected ? ' emoji-container--selected' : ''}`;
+    let containerClasses = 'emoji-container';
+    if (isSelected) {
+      containerClasses += ` ${containerClasses}--selected`;
+    }
+    const ariaLabel = `Emoji ${name}`;
 
     return (
       <div className={containerClasses}>
-        <button style={styles} className='emoji-item' onClick={() => clickHandler(name)}></button>
+        <button
+          alia-label={ariaLabel}
+          className="emoji-item"
+          onClick={this._onSelect}
+          style={styles}>
+        </button>
       </div>
     );
   }
