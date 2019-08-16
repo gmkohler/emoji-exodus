@@ -28,10 +28,12 @@ function selectEmoji(emojiName, isSelected) {
 function transferSelectedEmoji() {
   return (dispatch, getState) => {
     const emojiNames = selectedEmojiNameSelector(getState());
-    dispatch({
-      type: ActionTypes.TRANSFER_SELECTED_EMOJI,
-      payload: Network.transferSourceEmojiToDestination(emojiNames),
-    });
+    if (emojiNames.length) {
+      dispatch({
+        type: ActionTypes.TRANSFER_SELECTED_EMOJI,
+        payload: Network.transferSourceEmojiToDestination(emojiNames),
+      });
+    }
   };
 }
 

@@ -1,7 +1,7 @@
 .emoji-container {
   display: inline-block;
   border-radius: 10px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .emoji-container:hover {

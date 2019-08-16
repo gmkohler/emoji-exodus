@@ -5,8 +5,7 @@ import store from './store';
 import './App.css';
 
 import SlackTokenInput from './components/SlackTokenInput';
-import EmojiList from './components/EmojiList';
-import Pagination from './components/Pagination';
+import SourceEmojiSection from './components/SourceEmojiSection';
 
 function App() {
   return (
@@ -14,8 +13,7 @@ function App() {
       <div className="App">
         <h1>Emoji Transfer Ui</h1>
         <SlackTokenInput />
-        <EmojiList />
-        <Pagination />
+        <SourceEmojiSection />
       </div>
     </Provider>
   );
