@@ -2,7 +2,7 @@ import ActionTypes from '../ActionTypes';
 
 function setCurrentPage(pageNum) {
   return {
-    payload: parseInt(pageNum || 0),
+    payload: pageNum, // callers must sanitize pageNum
     type: ActionTypes.SET_CURRENT_PAGE,
   };
 }
