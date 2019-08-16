@@ -1,4 +1,9 @@
+.token-input-form {
+  max-width: 500px;
+}
+
 .token-input-section {
+  display: block;
   margin-right: 30px;
 }
 
