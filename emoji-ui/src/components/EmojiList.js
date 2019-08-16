@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import EmojiItem from './EmojiItem';
 import SourceEmojiActions from '../store/actions/SourceEmoji';
 import { currentPageEmojiListSelector } from '../store/selectors/SourceEmoji';
-import EmojiItem from './EmojiItem';
 import './EmojiList.css';
 
 class EmojiListBase extends Component {
   static propTypes = {
+    loadSourceEmoji: PropTypes.func.isRequired,
+    selectEmoji: PropTypes.func.isRequired,
     sourceEmoji: PropTypes.arrayOf(
       PropTypes.shape({
         isSelected: PropTypes.bool,
@@ -17,26 +19,22 @@ class EmojiListBase extends Component {
         url: PropTypes.string,
       })
     ).isRequired,
-    sourceEmojiActions: PropTypes.shape({
-      loadSourceEmoji: PropTypes.func.isRequired,
-      selectEmoji: PropTypes.func.isRequired,
-    }).isRequired,
   };
 
   componentDidMount() {
-    this.props.sourceEmojiActions.loadSourceEmoji();
+    this.props.loadSourceEmoji();
   }
 
   render() {
-    const { sourceEmoji, sourceEmojiActions } = this.props;
-    const { selectEmoji } = sourceEmojiActions;
+    const { selectEmoji, sourceEmoji } = this.props;
 
-    const emojiListItem = sourceEmoji.map((emoji) => {
-      return (
-        <EmojiItem key={emoji.name} emoji={emoji} onSelect={selectEmoji} />
-      );
-    });
-    return <div className="emoji-list-container">{emojiListItem}</div>
+    return (
+      <div className="emoji-list-container">
+        {sourceEmoji.map(emoji => (
+          <EmojiItem {...emoji} key={emoji.name} onSelect={selectEmoji} />
+        ))}
+      </div>
+    );
   }
 }
 
@@ -45,7 +43,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { sourceEmojiActions: bindActionCreators(SourceEmojiActions, dispatch) };
+  return {
+    loadSourceEmoji: bindActionCreators(SourceEmojiActions.loadSourceEmoji, dispatch),
+    selectEmoji: bindActionCreators(SourceEmojiActions.selectEmoji, dispatch),
+  };
 }
 
 export default connect(

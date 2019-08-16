@@ -23,7 +23,8 @@ class PaginationBase extends Component {
 
   _onInputChange(e) {
     const { setCurrentPage } = this.props.paginationActions;
-    setCurrentPage(e.target.value);
+    const pageNum = parseInt(e.target.value);
+    setCurrentPage(isNaN(pageNum) ? 0 : pageNum);
   }
 
   render() {

@@ -2,14 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './EmojiItem.css';
 
-class EmojiItem extends Component {
+export default class EmojiItem extends Component {
   static propTypes = {
-    emoji: PropTypes.shape({
-      isSelected: PropTypes.bool.isRequired,
-      name: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }).isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired,
     onSelect: PropTypes.func.isRequired,
+    url: PropTypes.string.isRequired,
   };
 
   constructor() {
@@ -17,13 +15,17 @@ class EmojiItem extends Component {
     this._onSelect = this._onSelect.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return Object.entries(this.props).some(([key, val]) => nextProps[key] !== val);
+  }
+
   _onSelect() {
-    const { emoji, onSelect } = this.props;
-    onSelect(emoji.name, !emoji.isSelected);
+    const { isSelected, name, onSelect } = this.props;
+    onSelect(name, !isSelected);
   }
 
   render() {
-    const { isSelected, name, url } = this.props.emoji;
+    const { isSelected, name, url } = this.props;
     const styles = { backgroundImage: `url(${url})` };
     let containerClasses = 'emoji-container';
     if (isSelected) {
@@ -37,11 +39,10 @@ class EmojiItem extends Component {
           alia-label={ariaLabel}
           className="emoji-item"
           onClick={this._onSelect}
-          style={styles}>
+          style={styles}
+          title={name}>
         </button>
       </div>
     );
   }
 }
-
-export default EmojiItem;
