@@ -2,7 +2,7 @@ import ActionTypes from '../ActionTypes';
 
 const DEFAULT_STATE = {
   currentPage: 1,
-  pageItemLimit: 120,
+  pageItemLimit: 130,
 };
 
 /**

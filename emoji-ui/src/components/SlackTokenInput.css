@@ -1,10 +1,10 @@
 .token-input-form {
-  max-width: 500px;
+  max-width: 750px;
 }
 
 .token-input-section {
-  display: block;
-  margin-right: 30px;
+  font-size: 14px;
+  margin-right: 25px;
 }
 
 .token-input-input {
@@ -12,14 +12,14 @@
 }
 
 .token-input-help-text {
-  color: mediumaquamarine;
+  text-align: left;
+  color: #2f9271;
   display: block;
   margin-top: 10px;
 }
 
 .token-input-submit {
-  display: block;
+  width: 115px;
   margin: auto;
-  width: 20%;
   margin-top: 20px;
 }
