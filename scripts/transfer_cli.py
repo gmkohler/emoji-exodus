@@ -37,7 +37,6 @@ def _emoji_from_csv(source):
     emoji_names = set()
     with open(source, mode='r') as infile:
         reader = csv.DictReader(infile)
-        next(reader) # remove header
         for row in reader:
             emoji_names.add(row['emoji name'])
 
