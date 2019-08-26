@@ -16,5 +16,8 @@ else:
     emoji_to_delete = emoji
 
 for name, url in emoji_to_delete.items():
-    client.remove_emoji(name)
-    print("deleted {}".format(name))
+    try:
+        client.remove_emoji(name)
+        print("deleted {}".format(name))
+    except:
+        print("You don't have permission to delete {}".format(name))
