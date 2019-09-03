@@ -6,7 +6,7 @@ DESTINATION_ENV_VARIABLE = 'DESTINATION_SLACK_API_TOKEN'
 def token_from_header_or_env(token):
     if token is None:
         return None
-    elif token.startswith('Token '):
-        return token.replace('Token ', '')
+    elif token.startswith('Bearer '):
+        return token.replace('Bearer ', '')
     else:
         return token
