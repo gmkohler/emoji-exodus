@@ -1,0 +1,15 @@
+from setuptools import setup
+
+
+setup(
+    name='transfer',
+    version='0.1',
+    py_modules=['transfer_cli'],
+    install_requires=[
+        'Click',
+    ],
+    entry_points='''
+        [console_scripts]
+        transfer=scripts.transfer_cli:import_emoji
+    ''',
+)
