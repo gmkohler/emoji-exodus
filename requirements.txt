@@ -14,7 +14,6 @@ multidict==4.5.2
 requests==2.22.0
 six==1.12.0
 slackclient==2.1.0
--e git+git@github.com:gmkohler/emoji-exodus.git@d78aff7bc708bc81f0be1df0e924fae4aae6b36e#egg=transfer
 urllib3==1.25.3
 Werkzeug==0.15.5
 yarl==1.3.0

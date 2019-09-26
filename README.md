@@ -28,8 +28,8 @@ You're going to want the following environment variables set in your virtual env
 
   | Key  | Description |
   | ------------- | ------------- |
-  | SOURCE_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the source slack instance.  It should start with `xoxs-*`. |
-  | DESTINATION_SLACK_API_KEY  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the destination slack instance.  It should start with `xoxs-*`. |
+  | SOURCE_SLACK_API_TOKEN  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the source slack instance.  It should start with `xoxs-*`. |
+  | DESTINATION_SLACK_API_TOKEN  | A personal API key that can be found under `window.TS.boot_data.api_token` while inspecting the "customize slack" webpage of the destination slack instance.  It should start with `xoxs-*`. |
 
 ### List of names
 You can transfer a list of emoji names, e.g. `transfer emoji_1 emoji_2 emoji_3`
