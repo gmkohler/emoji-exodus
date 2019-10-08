@@ -1,11 +1,16 @@
 from image.image_client import get as get_image
 
+
+class EmojiNotFoundError(Exception):
+    pass
+
+
 def url_even_if_alias(emoji_dict, emoji_name):
     """If it's an alias, we want to get the url for the file.  Will return None if aliasing a standard emoji"""
     emoji_path = emoji_dict.get(emoji_name)
 
     if emoji_path is None:
-        raise("'{}' is not the name of an emoji in the source.".format(emoji_name))
+        raise EmojiNotFoundError("'{}' is not the name of an emoji in the source.".format(emoji_name))
     if emoji_path.startswith("alias:"):
         aliased_from = emoji_path.replace("alias:", "")
         emoji_path = emoji_dict.get(aliased_from)
@@ -31,7 +36,12 @@ def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
 def transfer(source_dict, destination_service, source_emoji_name):
     print("Transferring '{}'".format(source_emoji_name))
 
-    emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
+    try:
+        emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
+    except EmojiNotFoundError:
+        print("Image file not found for emoji '{}'".format(source_emoji_name))
+        return
+
     if emoji_image_url is None:
         # Making an alias for a standard emoji
         standard_emoji_name = source_dict.get(source_emoji_name).replace("alias:", "")
