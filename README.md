@@ -40,13 +40,23 @@ Additionally, you'll need to enable the CLI scripts by "installing" the repo its
 For more about this step, read the [Click documentation](https://click.palletsprojects.com/en/5.x/setuptools/#setuptools-integration).
 
 ### List of names
-You can transfer a list of emoji names, e.g. `transfer emoji_1 emoji_2 emoji_3`
+
+You can transfer a list of emoji names, e.g.:
+```sh
+transfer emoji_1 emoji_2 emoji_3
+```
 
 ### CSV file
-You can transfer emoji whose names are in a csv, e.g. `transfer --source='path/to/file.csv'`
-The CSV should have a column header called `emoji name`
+
+You can transfer emoji whose names are in a csv, e.g.:
+```sh
+transfer --source='path/to/file.csv'
+```
+
+Note: the CSV should have a column header called `emoji name`.
 
 ### Wildcards
+
 Both CLI interfaces support the use of `*` as a wildcard character. For example,
 passing `llama*` would transfer all emoji whose names start with `llama`, while `*llama*` would
 transfer all emoji with the word `llama` somewhere in the name.
