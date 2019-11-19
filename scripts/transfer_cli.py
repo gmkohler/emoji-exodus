@@ -53,7 +53,7 @@ def _emoji_from_csv(source):
     with open(source, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
-            emoji_names.add(row['emoji name'])
+            emoji_names.add(row['emoji name'].strip())
 
     return emoji_names
 
