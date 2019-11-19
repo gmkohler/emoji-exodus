@@ -109,3 +109,4 @@ venv.bak/
 
 # ui
 emoji-ui/node_modules/
+emoji-data/
