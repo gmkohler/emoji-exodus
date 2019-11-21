@@ -34,18 +34,26 @@ def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
     return destination_name
 
 def transfer(source_dict, destination_service, source_emoji_name):
+    """
+    Moves an emoji with `source_emoji_name` from a source client's dictionary to a destionation client.
+
+    `transfer` will do nothing if the emoji exists with the same name and image in the destination.
+    `transfer` will alias an destination emoji if the image exists with a different name.
+    `transfer` will prefix the source emoji name with 'cav-' if the name exists for a different image.
+    """
+
     print("Transferring '{}'".format(source_emoji_name))
 
     try:
         emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
     except EmojiNotFoundError:
-        print("Image file not found for emoji '{}'".format(source_emoji_name))
+        print("🔍 Image file not found for emoji '{}'".format(source_emoji_name))
         return
 
     if emoji_image_url is None:
         # Making an alias for a standard emoji
         standard_emoji_name = source_dict.get(source_emoji_name).replace("alias:", "")
-        print("'{}' aliases standard emoji '{}' detected.  Creating alias.".format(source_emoji_name, standard_emoji_name))
+        print("✅ '{}' aliases standard emoji '{}' detected.  Creating alias.".format(source_emoji_name, standard_emoji_name))
         return destination_service.add_alias(source_emoji_name, standard_emoji_name)
 
     # Creating a new emoji
@@ -57,7 +65,7 @@ def transfer(source_dict, destination_service, source_emoji_name):
 
     if destination_emoji_name_having_identical_image is None:
         name_of_source_emoji_in_destination = collision_free_name(destination_dict, source_emoji_name)
-        print("No existing image detected.  Adding new emoji '{}'.".format(name_of_source_emoji_in_destination))
+        print("✅ No existing image detected.  Adding new emoji '{}'.".format(name_of_source_emoji_in_destination))
         return destination_service.add_emoji(
             name_of_source_emoji_in_destination,
             source_emoji_image,
@@ -66,16 +74,14 @@ def transfer(source_dict, destination_service, source_emoji_name):
         names_for_identical_image = destination_service.emoji_dict.get_aliases(destination_emoji_name_having_identical_image)
 
         if source_emoji_name in names_for_identical_image:
-            print("source emoji '{}' already exists in the destination with this image and name.  Taking no action.".format(source_emoji_name))
+            print("🙈 source emoji '{}' already exists in the destination with this image and name.  Taking no action.".format(source_emoji_name))
             return None
         else:
             name_of_source_emoji_in_destination = collision_free_name(destination_dict, source_emoji_name)
-            print("source emoji '{source_emoji_name}' exists as destination emoji '{identical_destination_emoji_name}' with the same image.  Creating alias '{aliased_name}'.".format(
+            print("✅ source emoji '{source_emoji_name}' exists as destination emoji '{identical_destination_emoji_name}' with the same image.  Creating alias '{aliased_name}'.".format(
                 source_emoji_name=source_emoji_name,
                 identical_destination_emoji_name=destination_emoji_name_having_identical_image,
                 aliased_name=name_of_source_emoji_in_destination
             ))
 
             return destination_service.add_alias(name_of_source_emoji_in_destination, destination_emoji_name_having_identical_image)
-
-

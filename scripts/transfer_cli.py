@@ -3,50 +3,86 @@ import csv
 import os
 import re
 import time
-
+from slack.errors import SlackApiError
 from emoji import emoji_transfer_service, emoji_service, find_all_emoji_by_name
+from util.iterable import each_slice
+from util.status_codes import TOO_MANY_REQUESTS
 from util.tokens import SOURCE_ENV_VARIABLE, DESTINATION_ENV_VARIABLE
-
 
 class InputError(Exception):
     pass
 
 
-CHUNK_SIZE = os.environ.get('CHUNK_SIZE', 40)
 SLEEP_SECONDS = os.environ.get('SLEEP_SECONDS', 60)
-
+SLICE_SIZE = os.environ.get('SLICE_SIZE', 30) # empirically, the API accepts 30 calls per minute.
 
 @click.command()
 @click.option('--source', default=None, help='A csv filename from which to import emoji')
 @click.argument('emoji_names', nargs=-1)
 def import_emoji(emoji_names, source):
+    """
+    Transfers emoji from one slack to another via EmojiTransferService.
+
+    Input argument (CLI) can be a series of names or a path to a CSV file (via `--source` option).
+
+    Source and destination are configured via environment variables defined by the *_ENV_VARIABLE
+    consants in util.tokens.
+
+    Slicing is done to pre-emptively avoid rate-limiting, but rate-limiting is also handled.
+    """
     if not bool(source) ^ bool(emoji_names):
-        raise InputError("You must either provide a list emoji_names or provide a CSV file via the --csv option")
+        raise InputError("You must either provide a list emoji_names or provide a CSV file via the --source option")
 
     source_dict = emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
     destination_service = emoji_service(os.environ.get(DESTINATION_ENV_VARIABLE))
     if bool(source):
         emoji_names = _emoji_from_csv(source)
 
-    emoji_names_to_be_transferred = find_all_emoji_by_name(emoji_names, source_dict)
+    emoji_names_to_be_transferred = sorted(find_all_emoji_by_name(emoji_names, source_dict))
 
-    for emoji_names in each_slice(emoji_names_to_be_transferred):
-        for emoji_name in emoji_names:
-            try:
-                emoji_transfer_service.transfer(
-                    source_dict,
-                    destination_service,
-                    emoji_name
-                )
-            except:
-                print("Unable to add {} - probably a standard emoji".format(emoji_name))
+    failed_emoji = []
+    try:
+        for emoji_name_slice in each_slice(emoji_names_to_be_transferred, SLICE_SIZE):
+            uploads_for_slice = 0 # avoids proactive waiting in idempotency.
+            for emoji_name in emoji_name_slice:
+                try:
+                    result = emoji_transfer_service.transfer(
+                        source_dict,
+                        destination_service,
+                        emoji_name
+                    )
+                    if result is not None:
+                        uploads_for_slice += 1
+                except SlackApiError as api_error:
+                    failed_emoji.append(emoji_name)
+                    print("SlackApiError {} encountered for emoji {}.".format(
+                        api_error.response.data.get('error', '(unknown)'),
+                        emoji_name
+                    ))
+                    # Too Many Requests should come with a 'Retry-After' header per the documentation.
+                    if api_error.response.status_code == TOO_MANY_REQUESTS:
+                        # The response includes a Retry-After header but in practice it doens't allow
+                        # many more requests after this value before failing with another 429.
+                        # Instead of eating that many failures, we'll sleep for 60 seconds, which in
+                        # practice allows another 30 requests before failing agianag
+                        print("🛑 Rate limit reached.  Sleeping for {} seconds".format(SLEEP_SECONDS))
+                        time.sleep(SLEEP_SECONDS)
+                except Exception as e:
+                    failed_emoji.append(emoji_name)
+                    print("Unknown exception {} for {}.".format(e, emoji_name))
 
+            if uploads_for_slice > 0:
+                print("😴 Proactive stalling.  Sleeping for {} seconds".format(SLEEP_SECONDS))
+                time.sleep(SLEEP_SECONDS)
+            else:
+                print("No uploads for slice.  Onward and Upward 📈.")
 
-        if len(emoji_names) > 1:
-            print("SLEEPING FOR {} SECONDS TO AVOID RATE LIMITING".format(SLEEP_SECONDS))
-            time.sleep(SLEEP_SECONDS)
-
-    print("🦙 Transfer complete! 🦙")
+        print("🎉 Transfer complete! 🎉")
+    finally:
+        if len(failed_emoji) > 0:
+            print("😿 failed to transfer the following:\n{}\n\n\n\n\n\n\n".format(
+                "\n".join(failed_emoji)
+            ))
 
 def _emoji_from_csv(source):
     emoji_names = set()
@@ -56,25 +92,3 @@ def _emoji_from_csv(source):
             emoji_names.add(row['emoji name'].strip())
 
     return emoji_names
-
-
-def each_slice(iterable):
-    """ Chunks the iterable into size elements at a time, each yielded as a list.
-
-    Example:
-      for chunk in each_slice(2, [1,2,3,4,5]):
-          print(chunk)
-
-      # output:
-      [1, 2]
-      [3, 4]
-      [5]
-    """
-    current_slice = []
-    for item in iterable:
-        current_slice.append(item)
-        if len(current_slice) >= CHUNK_SIZE:
-            yield current_slice
-            current_slice = []
-    if current_slice:
-        yield current_slice
