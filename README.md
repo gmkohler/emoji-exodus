@@ -68,10 +68,10 @@ transfer all emoji with the word `llama` somewhere in the name.
 #### Emoji Transfer Service (for transferring emoji)
 
 ```python
-from emoji import emoji_transfer_service, emoji_service
+from emoji import emoji_transfer_service, slack_emoji_service
 
-source_dict = emoji_service(<source_api_token>).emoji_dict.emoji_dict # don't ask.
-destination_service = emoji_service(<destination_api_token>)
+source_dict = slack_emoji_service(<source_api_token>).emoji_dict.emoji_dict # don't ask.
+destination_service = slack_emoji_service(<destination_api_token>)
 emoji_name = "my-emoji"
 
 emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)

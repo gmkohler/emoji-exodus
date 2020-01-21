@@ -1,10 +1,10 @@
 import os
 import time
-from emoji import emoji_transfer_service, emoji_service, find_all_emoji_by_name
+from emoji import emoji_transfer_service, slack_emoji_service, find_all_emoji_by_name
 from util.tokens import SOURCE_ENV_VARIABLE
 from image import image_client
 
-emoji_dict = emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
+emoji_dict = slack_emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
 # emoji_dict = {
 #     'burning-money': 'https://emoji.slack-edge.com/TMG9ZP0FN/burning-money/89a8f4991169040a.gif',
 #     'sjsquirrel': 'https://emoji.slack-edge.com/TMG9ZP0FN/sjsquirrel/0cdecd8af2ee3834.jpg',
@@ -26,3 +26,15 @@ for emoji_name, url_or_alias in emoji_dict.items():
         out.write(image_data.read())
 
     time.sleep(1)
+
+class FileService:
+    def __init__(directory):
+        self.directory = directory
+
+    def get_image(self, emoji_name):
+        """ returns BytesIO image """
+        pass
+
+    def same_image(self, file_name, image_bytes):
+        
+        pass

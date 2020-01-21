@@ -1,7 +1,7 @@
 from .slack_emoji_client import SlackEmojiClient
 from .dicts.emoji_dict import EmojiDict
 
-class EmojiService():
+class SlackEmojiService():
     def __init__(self, token):
         self.client = SlackEmojiClient(token = token)
         self.emoji_dict = EmojiDict(self.client.emoji_list().data['emoji'])

@@ -4,7 +4,7 @@ import os
 import re
 import time
 from slack.errors import SlackApiError
-from emoji import emoji_transfer_service, emoji_service, find_all_emoji_by_name
+from emoji import emoji_transfer_service, slack_emoji_service, find_all_emoji_by_name
 from util.iterable import each_slice
 from util.status_codes import TOO_MANY_REQUESTS
 from util.tokens import SOURCE_ENV_VARIABLE, DESTINATION_ENV_VARIABLE
@@ -33,8 +33,8 @@ def import_emoji(emoji_names, csv_filename):
     if not bool(csv_filename) ^ bool(emoji_names):
         raise InputError("You must either provide a list emoji_names or provide a CSV file via the --csv_filename option")
 
-    source_dict = emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
-    destination_service = emoji_service(os.environ.get(DESTINATION_ENV_VARIABLE))
+    source_dict = slack_emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
+    destination_service = slack_emoji_service(os.environ.get(DESTINATION_ENV_VARIABLE))
     if bool(csv_filename):
         emoji_names = _emoji_from_csv(csv_filename)
 

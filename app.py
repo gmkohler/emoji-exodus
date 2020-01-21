@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from emoji import emoji_service, emoji_transfer_service
+from emoji import slack_emoji_service, emoji_transfer_service
 import util.tokens as tokens
 import os
 import sys
@@ -17,7 +17,7 @@ def get_emoji_list():
         source_token = tokens.token_from_header_or_env(
             request.headers.get(tokens.SOURCE_AUTHORIZATION_HEADER, os.environ.get(tokens.SOURCE_ENV_VARIABLE))
         )
-        source_service = emoji_service(source_token)
+        source_service = slack_emoji_service(source_token)
 
         source_dict = source_service.emoji_dict.emoji_dict # don't ask.
 
@@ -44,8 +44,8 @@ def transfer_emoji():
     )
 
     emoji_names = request.json.get('emoji')
-    source_dict = emoji_service(source_token).emoji_dict
-    destination_service = emoji_service(destination_token)
+    source_dict = slack_emoji_service(source_token).emoji_dict
+    destination_service = slack_emoji_service(destination_token)
 
     for emoji_name in emoji_names:
         emoji_transfer_service.transfer(source_dict, destination_service, emoji_name)
