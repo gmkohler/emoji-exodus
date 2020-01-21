@@ -17,26 +17,26 @@ SLEEP_SECONDS = os.environ.get('SLEEP_SECONDS', 60)
 SLICE_SIZE = os.environ.get('SLICE_SIZE', 30) # empirically, the API accepts 30 calls per minute.
 
 @click.command()
-@click.option('--source', default=None, help='A csv filename from which to import emoji')
+@click.option('--csv_filename', default=None, help='A csv filename including emoji names from the source which should be transferred')
 @click.argument('emoji_names', nargs=-1)
-def import_emoji(emoji_names, source):
+def import_emoji(emoji_names, csv_filename):
     """
     Transfers emoji from one slack to another via EmojiTransferService.
 
-    Input argument (CLI) can be a series of names or a path to a CSV file (via `--source` option).
+    Input argument (CLI) can be a series of names or a path to a CSV file (via `--csv_filename` option).
 
     Source and destination are configured via environment variables defined by the *_ENV_VARIABLE
     consants in util.tokens.
 
     Slicing is done to pre-emptively avoid rate-limiting, but rate-limiting is also handled.
     """
-    if not bool(source) ^ bool(emoji_names):
-        raise InputError("You must either provide a list emoji_names or provide a CSV file via the --source option")
+    if not bool(csv_filename) ^ bool(emoji_names):
+        raise InputError("You must either provide a list emoji_names or provide a CSV file via the --csv_filename option")
 
     source_dict = emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
     destination_service = emoji_service(os.environ.get(DESTINATION_ENV_VARIABLE))
-    if bool(source):
-        emoji_names = _emoji_from_csv(source)
+    if bool(csv_filename):
+        emoji_names = _emoji_from_csv(csv_filename)
 
     emoji_names_to_be_transferred = sorted(find_all_emoji_by_name(emoji_names, source_dict))
 
@@ -84,9 +84,9 @@ def import_emoji(emoji_names, source):
                 "\n".join(failed_emoji)
             ))
 
-def _emoji_from_csv(source):
+def _emoji_from_csv(csv_filename):
     emoji_names = set()
-    with open(source, mode='r') as infile:
+    with open(csv_filename, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
             emoji_names.add(row['emoji name'].strip())
