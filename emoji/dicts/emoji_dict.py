@@ -25,8 +25,8 @@ class EmojiDict:
 
         return self.emoji_dict
 
-    def add_emoji(self, emoji_name, image_url, image_file):
-        self.emoji_dict.update(emoji_name = image_url)
+    def add_emoji(self, emoji_name, image_path, image_file):
+        self.emoji_dict.update(emoji_name = image_path)
         self.alias_dict().update(emoji_name, emoji_name)
         self.image_hash_dict().update(emoji_name, image_file=image_file)
 

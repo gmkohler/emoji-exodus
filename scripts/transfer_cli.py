@@ -1,25 +1,33 @@
+import pdb
 import click
 import csv
-import os
-import re
 import time
+from os import environ
 from slack.errors import SlackApiError
-from emoji import emoji_transfer_service, slack_emoji_service, find_all_emoji_by_name
+from emoji import (
+    directory_emoji_service,
+    emoji_transfer_service,
+    find_all_emoji_by_name,
+    slack_emoji_service
+)
 from util.iterable import each_slice
 from util.status_codes import TOO_MANY_REQUESTS
 from util.tokens import SOURCE_ENV_VARIABLE, DESTINATION_ENV_VARIABLE
+
 
 class InputError(Exception):
     pass
 
 
-SLEEP_SECONDS = os.environ.get('SLEEP_SECONDS', 60)
-SLICE_SIZE = os.environ.get('SLICE_SIZE', 30) # empirically, the API accepts 30 calls per minute.
+SLEEP_SECONDS = environ.get('SLEEP_SECONDS', 60)
+SLICE_SIZE = environ.get('SLICE_SIZE', 30) # empirically, the API accepts 30 calls per minute.
+
 
 @click.command()
 @click.option('--csv_filename', default=None, help='A csv filename including emoji names from the source which should be transferred')
+@click.option('--source_directory', default=None, help='A source directory containing images which should be transferred to a destination')
 @click.argument('emoji_names', nargs=-1)
-def import_emoji(emoji_names, csv_filename):
+def import_emoji(emoji_names, csv_filename, source_directory):
     """
     Transfers emoji from one slack to another via EmojiTransferService.
 
@@ -30,15 +38,23 @@ def import_emoji(emoji_names, csv_filename):
 
     Slicing is done to pre-emptively avoid rate-limiting, but rate-limiting is also handled.
     """
-    if not bool(csv_filename) ^ bool(emoji_names):
-        raise InputError("You must either provide a list emoji_names or provide a CSV file via the --csv_filename option")
+    if not bool(csv_filename) ^ bool(emoji_names) ^ bool(source_directory):
+        raise InputError("You must either provide a list emoji_names, a CSV file name via the --csv_filename option, or a source directory via --source_directory")
 
-    source_dict = slack_emoji_service(os.environ.get(SOURCE_ENV_VARIABLE)).emoji_dict.emoji_dict
-    destination_service = slack_emoji_service(os.environ.get(DESTINATION_ENV_VARIABLE))
+    source_service = None
+    if(bool(source_directory)):
+        source_service = directory_emoji_service(source_directory)
+    else:
+        source_service = slack_emoji_service(environ.get(SOURCE_ENV_VARIABLE))
+
+    source_dict = source_service.emoji_dict.emoji_dict
     if bool(csv_filename):
         emoji_names = _emoji_from_csv(csv_filename)
+    if not bool(emoji_names):
+        emoji_names = [*source_dict]
 
     emoji_names_to_be_transferred = sorted(find_all_emoji_by_name(emoji_names, source_dict))
+    destination_service = slack_emoji_service(environ.get(DESTINATION_ENV_VARIABLE))
 
     failed_emoji = []
     try:
@@ -47,7 +63,7 @@ def import_emoji(emoji_names, csv_filename):
             for emoji_name in emoji_name_slice:
                 try:
                     result = emoji_transfer_service.transfer(
-                        source_dict,
+                        source_service,
                         destination_service,
                         emoji_name
                     )
@@ -64,7 +80,7 @@ def import_emoji(emoji_names, csv_filename):
                         # The response includes a Retry-After header but in practice it doens't allow
                         # many more requests after this value before failing with another 429.
                         # Instead of eating that many failures, we'll sleep for 60 seconds, which in
-                        # practice allows another 30 requests before failing agianag
+                        # practice allows another 30 requests before failing again
                         print("🛑 Rate limit reached.  Sleeping for {} seconds".format(SLEEP_SECONDS))
                         time.sleep(SLEEP_SECONDS)
                 except Exception as e:
@@ -84,6 +100,7 @@ def import_emoji(emoji_names, csv_filename):
                 "\n".join(failed_emoji)
             ))
 
+
 def _emoji_from_csv(csv_filename):
     emoji_names = set()
     with open(csv_filename, mode='r') as infile:
@@ -92,3 +109,5 @@ def _emoji_from_csv(csv_filename):
             emoji_names.add(row['emoji name'].strip())
 
     return emoji_names
+
+

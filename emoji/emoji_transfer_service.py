@@ -1,21 +1,4 @@
-from image.image_client import get as get_image
-
-
-class EmojiNotFoundError(Exception):
-    pass
-
-
-def url_even_if_alias(emoji_dict, emoji_name):
-    """If it's an alias, we want to get the url for the file.  Will return None if aliasing a standard emoji"""
-    emoji_path = emoji_dict.get(emoji_name)
-
-    if emoji_path is None:
-        raise EmojiNotFoundError("'{}' is not the name of an emoji in the source.".format(emoji_name))
-    if emoji_path.startswith("alias:"):
-        aliased_from = emoji_path.replace("alias:", "")
-        emoji_path = emoji_dict.get(aliased_from)
-
-    return emoji_path
+from .slack_emoji_service import EmojiNotFoundError
 
 def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
     destination_name = source_emoji_name
@@ -33,7 +16,7 @@ def collision_free_name(destination_dict, source_emoji_name, prefix="cav"):
 
     return destination_name
 
-def transfer(source_dict, destination_service, source_emoji_name):
+def transfer(source_service, destination_service, source_emoji_name):
     """
     Moves an emoji with `source_emoji_name` from a source client's dictionary to a destionation client.
 
@@ -43,9 +26,9 @@ def transfer(source_dict, destination_service, source_emoji_name):
     """
 
     print("Transferring '{}'".format(source_emoji_name))
-
+    # pdb.set_trace()
     try:
-        emoji_image_url = url_even_if_alias(source_dict, source_emoji_name)
+        emoji_image_url = source_service.get_path(source_emoji_name)
     except EmojiNotFoundError:
         print("🔍 Image file not found for emoji '{}'".format(source_emoji_name))
         return
@@ -57,7 +40,7 @@ def transfer(source_dict, destination_service, source_emoji_name):
         return destination_service.add_alias(source_emoji_name, standard_emoji_name)
 
     # Creating a new emoji
-    source_emoji_image = get_image(emoji_image_url)
+    source_emoji_image = source_service.get_image(emoji_image_url)
     destination_dict = destination_service.emoji_dict
 
     # Check destination emoji for the exact same image as the source emoji
