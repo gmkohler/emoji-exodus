@@ -1,8 +1,8 @@
-from io import BytesIO
 from os import listdir
 from os.path import isfile, join, splitext
 from .dicts.emoji_dict import EmojiDict
 from image import image_client
+
 
 class DirectoryEmojiService():
     """ Only usable as a source; see the write_to_directory script for inspiration on letting this be a destination. """
@@ -19,6 +19,7 @@ class DirectoryEmojiService():
 
 
 def _emoji_from_directory(directory_path='./source-emoji-data'):
+    """ e.g. { 'fishthonk': './source-directory/fishthonk.png' } """
     return {
         splitext(filename)[0]: join(directory_path, filename)
         for filename in listdir(directory_path)

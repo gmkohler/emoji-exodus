@@ -4,7 +4,6 @@ import sys
 import slack
 from image import image_client
 
-
 class SlackEmojiClient:
     def __init__(self, token):
         self.client = slack.WebClient(token=token)
@@ -29,4 +28,3 @@ class SlackEmojiClient:
 
     def emoji_list(self):
         return self.client.emoji_list()
-

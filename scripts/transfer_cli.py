@@ -20,7 +20,7 @@ class InputError(Exception):
 
 
 SLEEP_SECONDS = environ.get('SLEEP_SECONDS', 60)
-SLICE_SIZE = environ.get('SLICE_SIZE', 30) # empirically, the API accepts 30 calls per minute.
+SLICE_SIZE = environ.get('SLICE_SIZE', 30)  # empirically, the API accepts 30 calls per minute.
 
 
 @click.command()
@@ -59,7 +59,7 @@ def import_emoji(emoji_names, csv_filename, source_directory):
     failed_emoji = []
     try:
         for emoji_name_slice in each_slice(emoji_names_to_be_transferred, SLICE_SIZE):
-            uploads_for_slice = 0 # avoids proactive waiting in idempotency.
+            uploads_for_slice = 0  # avoids proactive waiting in idempotency.
             for emoji_name in emoji_name_slice:
                 try:
                     result = emoji_transfer_service.transfer(
